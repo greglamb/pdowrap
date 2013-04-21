@@ -4,8 +4,8 @@ class DB {
 
     protected $connection;
 
-    public function __construct($dsn, $options = null) {
-        $this->connection = ConnectionBag::get($dsn, $options);
+    public function __construct($dsn, $username = null, $password = null, $options = null) {
+        $this->connection = &ConnectionBag::get($dsn, $username, $password, $options);
     }
 
     protected function query($sql, $parameters) {
