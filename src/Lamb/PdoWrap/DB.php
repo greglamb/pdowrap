@@ -123,7 +123,7 @@ class DB {
     }
 
     public function query($sql, $parameters = array()) {
-        list($result, $sth) = $this->Query($sql, $parameters);
+        list($result, $sth) = $this->getResult($sql, $parameters);
 
         return $sth;
     }
