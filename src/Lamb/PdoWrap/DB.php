@@ -1,4 +1,4 @@
-<?php namespace Lamb\PdoWrap;
+<?php namespace Lamb\PDOWrap;
 
 use PDO;
 use PDOException;
@@ -7,7 +7,7 @@ class DB {
 
     protected $connection;
 
-    public function __construct($dsn, $username = null, $password = null, $options = null) {
+    public function __construct($dsn, $username = null, $password = null, $options = array()) {
         $this->connection = ConnectionBag::get($dsn, $username, $password, $options);
     }
 

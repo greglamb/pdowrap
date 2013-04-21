@@ -1,4 +1,4 @@
-<?php namespace Lamb\PdoWrap;
+<?php namespace Lamb\PDOWrap;
 
 use PDO;
 
@@ -21,7 +21,7 @@ class ConnectionBag {
     {
         $id = md5(serialize(func_num_args()));
 
-        if (!self::$connection[$id]) {
+        if (!isset(self::$connection[$id])) {
             $options = array_diff_key(self::$options, $options) + $options;
             self::$connection[$id] = new PDO($dsn, $username, $password, $options);
         }
