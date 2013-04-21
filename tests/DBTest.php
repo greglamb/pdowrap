@@ -27,6 +27,8 @@ class DBTest extends PHPUnit_Framework_TestCase {
         $db = new DB('mysql:host=localhost;dbname=tests', 'root');
         print_r(
             $db->execute('INSERT INTO test () VALUES (?, ?)',array(1, 'Hello'))
+        );
+        print_r(
             $db->execute('INSERT INTO test () VALUES (?, ?)',array(1, 'World'))
         );
     }
