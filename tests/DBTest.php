@@ -25,33 +25,33 @@ class DBTest extends PHPUnit_Framework_TestCase {
 
     public function testInsert() {
         $db = new DB('mysql:host=localhost;dbname=tests', 'root');
-        print_r(
-            $db->execute('INSERT INTO test () VALUES (?, ?)',array(1, 'Hello'))
-        );
-        print_r(
-            $db->execute('INSERT INTO test () VALUES (?, ?)',array(1, 'World'))
-        );
+        $db->execute('INSERT INTO test () VALUES (?, ?)',array(1, 'Hello'))
+        $db->execute('INSERT INTO test () VALUES (?, ?)',array(1, 'World'))
     }
 
     public function testSelectAll() {
         $db = new DB('mysql:host=localhost;dbname=tests', 'root');
-        print_r(
-            $db->getAll('SELECT test')
+        $expected = array(
+            array('id' => 1, 'data' => 'Hello')
+            ,array('id' => 2, 'data' => 'World')
         );
+        $actual = $db->getAll('SELECT FROM test');
+        $this->assertEquals($expected, $actual);
     }
 
     public function testSelectOne() {
         $db = new DB('mysql:host=localhost;dbname=tests', 'root');
-        print_r(
-            $db->getOne('SELECT id WHERE data = ?', array('World'))
-        );
+        $expected = 2;
+        $actual = $db->getOne('SELECT id FROM test WHERE data = ?', array('World'));
+        $this->assertEquals($expected, $actual);
     }
 
     public function testSelectRow() {
         $db = new DB('mysql:host=localhost;dbname=tests', 'root');
-        print_r(
-            $db->getRow('SELECT id WHERE data = ?', array('Hello'))
-        );
+        $expected = array('id' => 1, 'data' => 'Hello');
+        $actual = $db->getRow('SELECT id, data FROM test WHERE data = ?', array('Hello'));
+        $this->assertEquals($expected, $actual);
+
     }
 
 }
