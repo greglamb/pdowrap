@@ -35,7 +35,7 @@ class DBTest extends PHPUnit_Framework_TestCase {
             array('id' => 1, 'data' => 'Hello')
             ,array('id' => 2, 'data' => 'World')
         );
-        $actual = $db->getAll('SELECT FROM test');
+        $actual = $db->getAll('SELECT id, data FROM test');
         $this->assertEquals($expected, $actual);
     }
 
