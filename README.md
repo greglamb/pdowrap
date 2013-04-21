@@ -1,1 +1,2 @@
-[![Build Status](https://travis-ci.org/greglamb/pdowrap.png?branch=develop)](https://travis-ci.org/greglamb/pdowrap)
+Master: [![Build Status](https://travis-ci.org/greglamb/pdowrap.png?branch=master)](https://travis-ci.org/greglamb/master)
+Develop: [![Build Status](https://travis-ci.org/greglamb/pdowrap.png?branch=develop)](https://travis-ci.org/greglamb/pdowrap)
