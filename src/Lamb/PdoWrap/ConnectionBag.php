@@ -17,9 +17,9 @@ class ConnectionBag {
 
     private function __construct() { }
 
-    public static function &get($dsn, $username, $password, $options)
+    public static function get($dsn, $username, $password, $options)
     {
-        $id = md5(json_encode(func_num_args()));
+        $id = md5(serialize(func_num_args()));
 
         if (!self::$connection[$id]) {
             $options = array_diff_key(self::$options, $options) + $options;

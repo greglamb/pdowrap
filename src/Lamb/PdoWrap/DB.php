@@ -8,11 +8,15 @@ class DB {
     protected $connection;
 
     public function __construct($dsn, $username = null, $password = null, $options = null) {
-        $this->connection = &ConnectionBag::get($dsn, $username, $password, $options);
+        $this->connection = ConnectionBag::get($dsn, $username, $password, $options);
     }
 
     public function disconnect() {
         $this->connection = null;
+    }
+
+    public function getDbh() {
+        return $this->connection;
     }
 
     protected function getResult($sql, $parameters) {
