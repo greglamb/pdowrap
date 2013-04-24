@@ -7,15 +7,26 @@ class DB {
 
     protected $connection;
 
-    public function __construct($dsn, $username = null, $password = null, $options = array()) {
-        $this->connection = ConnectionBag::get($dsn, $username, $password, $options);
+    public function __construct($config) {
+	if (is_array($config)) {
+		extract($config);
+	} else if (file_exists($config)) {
+		$config = require($config);
+		extract($config);
+	} else {
+		throw new Exception('Invalid Configuration');
+	}
+
+	if (!$options) { $options = array(); }
+
+        $this->connection = &ConnectionBag::get($dsn, $username, $password, $options);
     }
 
     public function disconnect() {
         $this->connection = null;
     }
 
-    public function getDbh() {
+    public function &getDbh() {
         return $this->connection;
     }
 

@@ -17,7 +17,7 @@ class ConnectionBag {
 
     private function __construct() { }
 
-    public static function get($dsn, $username, $password, $options)
+    public static function &get($dsn, $username, $password, $options = array())
     {
         $id = md5(serialize(func_num_args()));
 
