@@ -13,7 +13,7 @@ class ConnectionBag {
         PDO::ATTR_STRINGIFY_FETCHES => false,
         PDO::ATTR_EMULATE_PREPARES => false,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_CLASS,
-        PDO::ATTR_STATEMENT_CLASS => array('stdClass', array())
+        PDO::ATTR_STATEMENT_CLASS => array('Statement', array())
     );
 
     private function __construct() { }
