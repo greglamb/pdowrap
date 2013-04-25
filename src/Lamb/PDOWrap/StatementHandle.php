@@ -4,6 +4,10 @@ class StatementHandle {
     
     protected $sth;
     
+    public function __construct($sth) {
+        $this->sth = $sth;
+    }
+    
     public function fetchRow() {
         $row = $this->sth->fetch();
 
