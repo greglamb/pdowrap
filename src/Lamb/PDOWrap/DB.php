@@ -1,6 +1,7 @@
 <?php namespace Lamb\PDOWrap;
 
 use PDO;
+use Exception;
 use PDOException;
 
 class DB {
