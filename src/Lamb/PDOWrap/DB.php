@@ -35,7 +35,7 @@ class DB {
     		throw new Exception('Invalid Configuration');
     	}
 
-        if (!is_array($options)) { $options = array(); }
+        if (empty($options))  { $options = array(); }
 
         $this->dbh = &ConnectionBag::get($dsn, $username, $password, $options);
     }
