@@ -5,29 +5,27 @@ use PDOException;
 
 class DB {
 
-    protected $connection;
+    protected $dbh;
 
     public function __construct($config) {
-	if (is_array($config)) {
-		extract($config);
-	} else if (file_exists($config)) {
-		$config = require($config);
-		extract($config);
-	} else {
-		throw new Exception('Invalid Configuration');
-	}
+    	if (is_array($config)) {
+    		extract($config);
+    	} else if (file_exists($config)) {
+    		$config = require($config);
+    		extract($config);
+    	} else {
+    		throw new Exception('Invalid Configuration');
+    	}
 
-	if (!$options) { $options = array(); }
-
-        $this->connection = &ConnectionBag::get($dsn, $username, $password, $options);
+        $this->dbh = &ConnectionBag::get($dsn, $username, $password, $options);
     }
 
     public function disconnect() {
-        $this->connection = null;
+        $this->dbh = null;
     }
 
     public function &getDbh() {
-        return $this->connection;
+        return $this->dbh;
     }
 
     protected function getResult($sql, $parameters) {
@@ -36,10 +34,10 @@ class DB {
         do {
             $retrying = false;
             try {
-                $sth = $this->connection->prepare($sql);
+                $sth = $this->dbh->prepare($sql);
                 $result = $sth->execute($parameters);
             } catch (PDOException $e) {
-                $pdoDriver = $this->connection->getAttribute(PDO::ATTR_DRIVER_NAME);
+                $pdoDriver = $this->dbh->getAttribute(PDO::ATTR_DRIVER_NAME);
                 if (($queryAttempts < 3) && ($e->getCode() == 1213) && ($pdoDriver == 'mysql')) {
                     $retrying = true;
                     $queryAttempts++;
@@ -53,19 +51,19 @@ class DB {
     }
 
     public function enableAutoCommit() {
-        $this->connection->setAttribute(PDO::ATTR_AUTOCOMMIT, TRUE);
+        $this->dbh->setAttribute(PDO::ATTR_AUTOCOMMIT, TRUE);
     }
 
     public function disableAutoCommit() {
-        $this->connection->setAttribute(PDO::ATTR_AUTOCOMMIT, FALSE);
+        $this->dbh->setAttribute(PDO::ATTR_AUTOCOMMIT, FALSE);
     }
 
     public function enableDebug() {
-        $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
     public function disableDebug() {
-        $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+        $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     }
 
     public function setFetchMode($fetchMode = null) {
@@ -73,29 +71,32 @@ class DB {
 
         switch ($fetchMode) {
             case 'both':
-                $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH);
+                $this->dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_BOTH);
                 break;
             case 'num':
-                $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_NUM);
+                $this->dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_NUM);
                 break;
             case 'assoc':
-                $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                $this->dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                break;
+            case 'class':
+                $this->dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_CLASS);
                 break;
             default:
-                $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                $this->dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_CLASS);
         }
     }
 
     public function beginTransaction() {
-        return $this->connection->beginTransaction();
+        return $this->dbh->beginTransaction();
     }
 
     public function commitTransaction() {
-        return $this->connection->commit();
+        return $this->dbh->commit();
     }
 
     public function rollbackTransaction() {
-        return $this->connection->rollBack();
+        return $this->dbh->rollBack();
     }
 
     public function getOne($sql, $parameters = array()) {
@@ -139,19 +140,7 @@ class DB {
 
     public function query($sql, $parameters = array()) {
         list($result, $sth) = $this->getResult($sql, $parameters);
-
-        return $sth;
-    }
-
-    public function fetchRow($sth) {
-        $row = $sth->fetch();
-
-        if ($row) {
-            return $row;
-        } else {
-            $sth->closeCursor();
-            unset($sth);
-        }
+        return new StatementHandle($sth);
     }
 
 }
