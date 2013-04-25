@@ -8,15 +8,34 @@ class DB {
 
     protected $dbh;
 
-    public function __construct($config) {
-    	if (is_array($config)) {
+    protected function array_get($array, $key, $default = null)
+    {
+        if (is_null($key)) return $array;
+
+        foreach (explode('.', $key) as $segment)
+        {
+            if ( ! is_array($array) or ! array_key_exists($segment, $array))
+            {
+                return value($default);
+            }
+
+            $array = $array[$segment];
+        }
+
+        return $array;
+    }
+
+    public function __construct($config, $key) {
+        if (is_array($config)) {
     		extract($config);
     	} else if (file_exists($config)) {
     		$config = require($config);
-    		extract($config);
+    		extract($this->array_get($config, $key));
     	} else {
     		throw new Exception('Invalid Configuration');
     	}
+
+        if (!is_array($options)) { $options = array(); }
 
         $this->dbh = &ConnectionBag::get($dsn, $username, $password, $options);
     }

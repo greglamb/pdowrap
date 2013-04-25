@@ -20,7 +20,7 @@ class ConnectionBag {
 
     public static function &get($dsn, $username = null, $password = null, $options = array())
     {
-        $id = md5(serialize(func_num_args()));
+        $id = md5(serialize(func_get_args()));
 
         if (!isset(self::$dbh[$id])) {
             $options = array_diff_key(self::$options, $options) + $options;
