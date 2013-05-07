@@ -20,18 +20,16 @@ class DB {
     }
 
     public function __construct($config, $key) {
-        if (is_array($config)) {
-    		extract($config);
-    	} else if (file_exists($config)) {
-    		$config = require($config);
-    		extract($this->array_get($config, $key));
+    	if (!is_array($config)) and (file_exists($config))) {
+    		$configFileContents = require($config);
+    		$config = $this->array_get($configFileContents, $key);
     	} else {
     		throw new Exception('Invalid Configuration');
     	}
 
-        if (empty($options))  { $options = array(); }
+        if (empty($config['options']))  { $config['options'] = array(); }
 
-        $this->dbh = &ConnectionBag::get($dsn, $username, $password, $options);
+        $this->dbh = &ConnectionBag::get($config['dsn'], $config['username'], $config['password'], $config['options']);
     }
 
     public function disconnect() {

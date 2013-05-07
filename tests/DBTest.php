@@ -6,8 +6,18 @@ class DBTest extends PHPUnit_Framework_TestCase {
 
     protected $db;
 
-    protected function setUp() {
-        $db = new DB('mysql:host=localhost;dbname=tests', 'root');
+    public function testArrayConnect() {
+        $config = array(
+                'dsn' => 'mysql:host=localhost;dbname=tests'
+                'username' => 'root'
+            );
+        $this->db = new DB($config);
+        $this->assertInstanceOf($this->db->&getDbh(), PDO);
+    }
+
+    public function testFileConnect() {
+        $this->db = new DB(__DIR__.'/TestConfig.php', 'TravisCI');
+        $this->assertInstanceOf($this->db->&getDbh(), PDO);
     }
 
     public function testCreateTable() {
@@ -28,6 +38,7 @@ class DBTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testSelectAll() {
+        $this->db->setFetchMode('assoc');
         $expected = array(
             array('id' => 1, 'data' => 'Hello')
             ,array('id' => 2, 'data' => 'World')
@@ -43,12 +54,15 @@ class DBTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testSelectRow() {
+        $this->db->setFetchMode('assoc');
         $expected = array('id' => 1, 'data' => 'Hello');
         $actual = $this->db->getRow('SELECT id, data FROM test WHERE data = ?', array('Hello'));
         $this->assertEquals($expected, $actual);
     }
 
     public function testFetch() {
+        $this->db->setFetchMode('assoc');
+
         $query = $this->db->query('SELECT id, data FROM test');
 
         $expected = array('id' => 1, 'data' => 'Hello');
