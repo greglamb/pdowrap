@@ -2,7 +2,7 @@
 
 return array(
 	'TravisCI' => array(
-		'dsn' => 'mysql:host=localhost;dbname=tests'
+		'dsn' => 'mysql:host=localhost;dbname=tests',
 		'username' => 'root'
 	)
 );

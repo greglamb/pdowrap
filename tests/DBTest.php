@@ -8,7 +8,7 @@ class DBTest extends PHPUnit_Framework_TestCase {
 
     public function testArrayConnect() {
         $config = array(
-                'dsn' => 'mysql:host=localhost;dbname=tests'
+                'dsn' => 'mysql:host=localhost;dbname=tests',
                 'username' => 'root'
             );
         $this->db = new DB($config);
