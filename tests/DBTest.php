@@ -12,12 +12,12 @@ class DBTest extends PHPUnit_Framework_TestCase {
                 'username' => 'root'
             );
         $this->db = new DB($config);
-        $this->assertInstanceOf($this->db->&getDbh(), PDO);
+        $this->assertInstanceOf(&$this->db->getDbh(), PDO);
     }
 
     public function testFileConnect() {
         $this->db = new DB(__DIR__.'/TestConfig.php', 'TravisCI');
-        $this->assertInstanceOf($this->db->&getDbh(), PDO);
+        $this->assertInstanceOf(&$this->db->getDbh(), PDO);
     }
 
     public function testCreateTable() {
