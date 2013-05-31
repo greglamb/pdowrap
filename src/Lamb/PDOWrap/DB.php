@@ -20,7 +20,7 @@ class DB {
     }
 
     public function __construct($config, $key) {
-    	if (!is_array($config)) and (file_exists($config))) {
+    	if ((!is_array($config)) and (file_exists($config))) {
     		$configFileContents = require($config);
     		$config = $this->array_get($configFileContents, $key);
     	} else {
