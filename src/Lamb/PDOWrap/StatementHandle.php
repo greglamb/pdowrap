@@ -14,7 +14,7 @@ class StatementHandle {
         if ($row) {
             return $row;
         } else {
-            $sth->closeCursor();
+            $this->sth->closeCursor();
             unset($this->sth);
         }
     }
