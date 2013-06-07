@@ -28,6 +28,8 @@ class DB {
     	}
 
         if (empty($config['options']))  { $config['options'] = array(); }
+        if (empty($config['username']))  { $config['username'] = null; }
+        if (empty($config['password']))  { $config['password'] = null; }
 
         $this->dbh = &ConnectionBag::get($config['dsn'], $config['username'], $config['password'], $config['options']);
     }
