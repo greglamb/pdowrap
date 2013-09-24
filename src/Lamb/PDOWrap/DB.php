@@ -23,6 +23,8 @@ class DB {
     	if ((!is_array($config)) and (file_exists($config))) {
     		$configFileContents = require($config);
     		$config = $this->array_get($configFileContents, $key);
+    	} else if (is_array($config)) {
+    		
     	} else {
     		throw new Exception('Invalid Configuration');
     	}
